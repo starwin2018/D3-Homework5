@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.subunit.CHN { fill: #8dcdf8; }
+.subunit.TWN { fill: #6995a7; }
+.subunit.HKG { fill: #045a8d; }
+.subunit.JPN { fill: #6998de; }
+.subunit.KOR { fill: #1426c5; }
+.subunit.IND { fill: #62f8fd; }
+.subunit.BTN { fill: #645ebb; }
+.subunit.NPL { fill: #80b1d3; }
+.subunit.BGD { fill: #5275d4; }
+.subunit.MMR { fill: #839ee7; }
+.subunit.THA { fill: #7489cf; }
+.subunit.KHM { fill: #bebada; }
+.subunit.VNM { fill: #9a65df; }
+.subunit.LAO { fill: #687cbd; }
+.subunit.PRK { fill: #4d5de9; }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.js"></script>
+<script>
+
+var width = 960,
+	height = 500;
+
+// draw svg
+var svg = d3.select("body").append("svg")
+	.attr("width", width)
+	.attr("height", height);
+
+// map projection
+var projection = d3.geo.patterson()
+	.center([58,54])
+    .scale(200)
+    .translate([0,0])
+    .precision(.1);
+
+// path generator
+var path = d3.geo.path()
+	.projection(projection);
+
+d3.json("asia.json", function(error, asia) {
+  
+  var subunits = topojson.feature(asia, asia.objects.subunits);
+	
+  svg.selectAll(".subunit")
+  	  .data(subunits.features)
+    .enter()
+      .append("path")
+      .attr("class", function(d) { return "subunit " + d.id; })
+      .attr("d", path);
+
+});
+
+</script>
